@@ -15,14 +15,17 @@ const tranferirBtn = document.getElementById("transferir");
 const saldoTemplate = document.getElementById("saldo");
 const salirBtn = document.getElementById("salir")
 
-depositarBtn.addEventListener("click", function);
-retirarBtn.addEventListener("click", function);
-transferirBtn.addEventListener("click", function);
-saldoTemplate.addEventListener("click", function);
-salirBtn.addEventListener("click", () =>
+depositarBtn.addEventListener("click", depositar);
+retirarBtn.addEventListener("click", retirar);
+transferirBtn.addEventListener("click", transferir);
+saldoTemplate.addEventListener("click", actualizarSaldoTemplate);
+salirBtn.addEventListener("click", () =>{
+    alert("Gracias por su visita. Que tenga un buen día.")
+    window.location.replace(/templates/despedida.html)
+}
 )
 
-function depositarBtn(){
+function depositar(){
 let cantidad = parseFloat("Introduzca la cantidad a depositar")
 if(isNaN(cantidad) || cantidad <=0 ){
     prompt("No es posible introducir esa cantidad")
@@ -33,7 +36,7 @@ if(isNaN(cantidad) || cantidad <=0 ){
 }
 }
 
-function retirarBtn(){
+function retirar(){
 let retiro = parseFloat("Introduzca la cantidad a retirar")
 if(isNaN(retiro) || retiro <=0 || retiro > saldo){
     alert("No es posible introducir esa cantidad")
@@ -44,7 +47,7 @@ if(isNaN(retiro) || retiro <=0 || retiro > saldo){
 }
 }
 
-function transferirBtn(){
+function transferir(){
 let monto = parseFloat("Introduzca la cantidad a transferir")
 if(isNaN(monto) || monto<=0 || monto>saldo){
 
@@ -59,10 +62,11 @@ while(pin!==PIN_CORRECTO && intentosRestantes>1){
         `El pin introducido es incorrecto. Inténtelo de nuevo. ${intentosRestantes} intentos restantes.`
     )
 }
-if(pin == PIN_CORRECTO){
+if(pin === PIN_CORRECTO){
     alert("PIN introducido correctamente")
+    actualizarSaldoTemplate()
 }else{
-    window.location.replace()
+    window.location.replace(/templates/cajeroBloqueado.html)
 }
 }
 
@@ -70,6 +74,7 @@ function actualizarSaldoTemplate(){
     saldoTemplate.innerHTML = `Su saldo es: ${saldo}€`
 }
 
-function validarIBAN(){
-    let expresionRegular = /^(ES\d{22}$/
+function validarIBAN(iban){
+    var expresionRegular = /^(ES\d{22})$/;
+    return expresionRegular.test(iban)
 }
