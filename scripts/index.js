@@ -29,16 +29,18 @@ if(isNaN(cantidad) || cantidad <=0 ){
 }else{
     saldo += cantidad;
     prompt("Cantidad depositada con éxito")
+    actualizarSaldoTemplate()
 }
 }
 
 function retirarBtn(){
 let retiro = parseFloat("Introduzca la cantidad a retirar")
-if(isNaN(retiro) || retiro <=0){
+if(isNaN(retiro) || retiro <=0 || retiro > saldo){
     prompt("No es posible introducir esa cantidad")
 }else{
     saldo -= retiro;
     prompt("Cantidad retirada con éxito")
+    actualizarSaldoTemplate()
 }
 }
 
@@ -47,7 +49,7 @@ let monto = parseFloat("Introduzca la cantidad a transferir")
 while(){
 
 }
-if(isNaN(monto) || monto<=0 || ){
+if(isNaN(monto) || monto<=0 || monto>saldo){
 
 }
 }
