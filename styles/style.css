@@ -1,6 +1,6 @@
 @font-face {
     font-family: ;
-    src: url() ;
+    src: url() format("truetype");
 }
 
 body{
@@ -31,6 +31,18 @@ menu a{
 
 }
 
+menu a:hover{
+
+}
+
+button{
+
+}
+
+button:hover{
+
+}
+
 .result{
-    
+
 }

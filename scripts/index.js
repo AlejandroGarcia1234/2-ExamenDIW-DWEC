@@ -3,79 +3,95 @@
  * GitHub: 
  */
 
-window.addEventListener("load", iniciarSesion)
+// Iniciamos la sesión
+window.addEventListener("load", iniciarSesion);
 
-let saldo = 1000
+// Declaración e inicialización de variables
+let saldo = 1000;
 const PIN_CORRECTO = "1234";
 let intentosRestantes = 3;
 
+// Añadimos identificadores
 const depositBtn = document.getElementById("depositar");
 const withdrawBtn = document.getElementById("retirar");
-const tranferBtn = document.getElementById("transferir");
+const transferBtn = document.getElementById("transferir");
+const exitBtn = document.getElementById("salir");
 const money = document.getElementById("saldo");
-const exitBtn = document.getElementById("salir")
+// Agregamos eventos de clip
+depositBtn.addEventListener("click", deposit);
+withdrawBtn.addEventListener("click", withdraw);
+transferBtn.addEventListener("click", transfer);
+exitBtn.addEventListener("click", () => {
+  alert("Gracias por utilizar este cajero. Que tenga un buen día.");
+  window.location.replace("/templates/despedida.html");
+});
 
-depositBtn.addEventListener("click", depositar);
-withdrawBtn.addEventListener("click", retirar);
-transferBtn.addEventListener("click", transferir);
-money.addEventListener("click", actualizarSaldo);
-exitBtn.addEventListener("click", () =>{
-    alert("Gracias por su visita. Que tenga un buen día.")
-    window.location.replace("/templates/despedida.html")
-}
-)
-
-function depositar(){
-const cantidadDeposito = parseFloat("Introduzca la cantidad a depositar")
-if(isNaN(cantidadDeposito) || cantidadDeposito <=0 ){
-    prompt("No es posible introducir esa cantidad")
-}else{
-    saldo += cantidad;
-    prompt("Cantidad depositada con éxito")
-    actualizarSaldo()
-}
+// Depositamos el saldo
+function deposit() {
+  const cantidadDeposito = parseFloat(prompt("Ingrese la cantidad a depositar:"));
+  if (isNaN(cantidadDeposito) || cantidadDeposito <= 0) {
+    alert("Cantidad no válida. Intentelo de nuevo.");
+  } else {
+    saldo += cantidadDeposito;
+    alert(`Se han depositado: ${cantidadDeposito.toFixed(2)} €`);
+    actualizarSaldoTemplate()
+  }
 }
 
-function retirar(){
-const cantidadRetiro = parseFloat("Introduzca la cantidad a retirar")
-if(isNaN(cantidadRetiro) || cantidadRetiro <=0 || cantidadRetiro > saldo){
-    alert("No es posible introducir esa cantidad")
-}else{
+// Retiramos el saldo
+function withdraw() {
+  const retiro = parseFloat(prompt("Ingrese la cantidad a retirar:"));
+  if (isNaN(retiro) || retiro <= 0 || retiro > saldo) {
+    alert("Cantidad no válida. Intentelo de nuevo.");
+  } else {
     saldo -= retiro;
-    alert("Cantidad retirada con éxito")
-    actualizarSaldo()
-}
-}
-
-function transferir(){
-const monto = parseFloat("Introduzca la cantidad a transferir")
-if(isNaN(monto) || monto<=0 || monto>saldo){
-
-}
+    alert(`Se han retirado ${retiro.toFixed(2)} €`);
+    actualizarSaldoTemplate()
+  }
 }
 
-function iniciarSesion(){
-let pin = prompt("Introduzca su PIN para iniciar sesión")
-while(pin!==PIN_CORRECTO && intentosRestantes>1){
-    intentosRestantes -- 
-    pin = prompt(
-        `El pin introducido es incorrecto. Inténtelo de nuevo. ${intentosRestantes} intentos restantes.`
-    )
-}
-if(pin === PIN_CORRECTO){
-    alert("PIN introducido correctamente")
-    actualizarSaldo()
-}else{
-    alert("No le quedan intentos restantes")
-    window.location.replace("/templates/cajeroBloqueado.html")
-}
-}
-
-function actualizarSaldo(){
-    saldoTemplate.innerHTML = `Su saldo es: ${saldo}€`
+// Transferimos el saldo
+function transfer() {
+  const cantidadTransfer = parseFloat(prompt("Ingrese la cantidad que quiera transferir:"));
+  if (isNaN(cantidadTransfer) || cantidadTransfer <= 0 || cantidadTransfer > saldo) {
+    alert("Cantidad inválida o insuficiente. Intente de nuevo.");
+  } else {
+    const cuentaDestino = prompt("Introduzca la cuenta de destino:");
+    if (!validarIBAN(cuentaDestino)) {
+      alert(`La cuenta ${cuentaDestino} no es valida.`)
+      return
+    }
+    alert(`Se han transferido ${monto.toFixed(2)} € a la cuenta ${cuentaDestino}.`);
+    saldo -= monto;
+    actualizarSaldoTemplate()
+  }
 }
 
-function validarIBAN(iban){
-    var expresionRegular = /^(ES\d{22})$/;
-    return expresionRegular.test(iban)
+// Iniciamos sesión
+function iniciarSesion() {
+  let pin = prompt("Ingrese su PIN:");
+  while (pin !== PIN_CORRECTO && intentosRestantes > 1) {
+    intentosRestantes--;
+    alert(`PIN incorrecto. Le quedan ${intentosRestantes} intentos.`);
+    pin = prompt("Ingrese su PIN:");
+  }
+
+  if (pin === PIN_CORRECTO) {
+    alert("Éxito al iniciar sesión.");
+    actualizarSaldoTemplate()
+  } else {
+    alert("PIN incorrecto. El cajero se ha bloqueado.");
+    window.location.replace("/templates/cajeroBloqueado.html");
+  }
+}
+
+// Actualizmos el saldo
+function actualizarSaldoTemplate() {
+  saldoTemplate.innerText = `${saldo} €`
+}
+
+// Esta función valida si la cuenta bancaria introducida entra dentro de estos parámetros
+function validarIBAN(iban) {
+  var expresionRegular = /^(ES\d{22})$/;
+  return expresionRegular.test(iban);
 }
